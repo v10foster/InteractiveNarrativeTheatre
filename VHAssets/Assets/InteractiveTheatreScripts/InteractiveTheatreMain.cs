@@ -881,6 +881,25 @@ public class InteractiveTheatreMain : VHMain
                 comp.LoadAsset("sword");
             }
         }
+        if (GUILayout.Button("Load top 20 nouns", GUILayout.Height(m_debugMenuButtonH)))
+        {
+            string nounsFilePath = "Assets\\InteractiveTheatreContent\\all_nouns_merged.txt";
+
+            FileStream nounsFileStream = File.OpenRead(nounsFilePath);
+            StreamReader sr = new StreamReader(nounsFileStream);
+            List<string> topNouns= new List<string>();
+            while(sr.Peek() >= 0)
+            {
+                string input = sr.ReadLine();
+                topNouns.Add(input.Substring(0, input.IndexOf(',')));
+            }
+
+            var comp = GetComponent<LoadGooglePolyAsset>();
+            if (comp)
+            {
+                comp.LoadAsset(topNouns[1]);
+            }
+        }
 
         GUILayout.Space(20);
 
