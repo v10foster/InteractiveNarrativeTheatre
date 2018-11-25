@@ -865,6 +865,23 @@ public class InteractiveTheatreMain : VHMain
             m_sbm.PythonCommand(string.Format(@"scene.command('char {0} gazefade out 1')", "Tiger"));
         }
 
+        if (GUILayout.Button("Load Featured Model", GUILayout.Height(m_debugMenuButtonH)))
+        {
+            var comp = GetComponent<LoadGooglePolyAsset>();
+            if (comp)
+            {
+                comp.LoadAsset();
+            }
+        }
+        if (GUILayout.Button("Load Sword Model", GUILayout.Height(m_debugMenuButtonH)))
+        {
+            var comp = GetComponent<LoadGooglePolyAsset>();
+            if (comp)
+            {
+                comp.LoadAsset("sword");
+            }
+        }
+
         GUILayout.Space(20);
 
         GUILayout.Label(string.Format("Gaze offset - {0} {1}", (int)m_gazeOffsetValueVertical, (int)m_gazeOffsetValueHorizontal));
