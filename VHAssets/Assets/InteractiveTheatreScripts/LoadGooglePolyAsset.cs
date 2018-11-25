@@ -10,6 +10,8 @@ public class LoadGooglePolyAsset : MonoBehaviour
     // Text where we display the current status.
     public Text statusText;
     public float desiredInitialSize = 1.0f;
+    public string lastRequestedAsset = "";
+    public bool findBestMatchRequested = false;
 
     // Use this for initialization
     void Start()
@@ -26,7 +28,7 @@ public class LoadGooglePolyAsset : MonoBehaviour
         //    statusText.text = "Requesting...";
     }
 
-    public void LoadAsset(string desiredName)
+    public void LoadAsset(string desiredName, bool findBestMatch = false)
     {
         Debug.Log("Requesting asset list using keyword: " + desiredName + " ...");
         //        PolyApi.ListAssets(PolyListAssetsRequest.Featured(), OnAssetListReturned);
@@ -46,8 +48,13 @@ public class LoadGooglePolyAsset : MonoBehaviour
         req.orderBy = PolyOrderBy.BEST;
         // Up to 20 results per page.
         req.pageSize = 20;
+
+        // Cache the request info because google doesn't track what you asked for
+        lastRequestedAsset = desiredName;
+        findBestMatchRequested = findBestMatch;
+        
         // Send the request.
-        PolyApi.ListAssets(req, OnAssetListReturned);
+            PolyApi.ListAssets(req, OnAssetListReturned);
     }
 
     // Update is called once per frame
@@ -63,15 +70,27 @@ public class LoadGooglePolyAsset : MonoBehaviour
             // Handle error.
             return;
         }
+
+        PolyAsset bestResult = null;
+
         // Success. result.Value is a PolyListAssetsResult and
         // result.Value.assets is a list of PolyAssets.
         foreach (PolyAsset asset in result.Value.assets)
         {
+            if(bestResult == null)
+            {
+                bestResult = asset;
+            }
             // Do something with the asset here.
-            Debug.Log("Loading asset " + asset.displayName + " ...");
-            PolyApi.GetAsset(asset.name, GetAssetCallback);
-            break;
+            if(!findBestMatchRequested || asset.displayName == lastRequestedAsset)
+            {
+                bestResult = asset;
+            }
+
         }
+
+        Debug.Log("Loading asset " + bestResult.displayName + " ...");
+        PolyApi.GetAsset(bestResult.name, GetAssetCallback);
     }
 
 
@@ -99,6 +118,10 @@ public class LoadGooglePolyAsset : MonoBehaviour
         PolyApi.Import(result.Value, options, ImportAssetCallback);
     }
 
+    // jofoste - replace this with a layout system
+    // hack to make the assets stack
+    int numberOfAssetsLoaded = 0;
+
     // Callback invoked when an asset has just been imported.
     private void ImportAssetCallback(PolyAsset asset, PolyStatusOr<PolyImportResult> result)
     {
@@ -117,7 +140,10 @@ public class LoadGooglePolyAsset : MonoBehaviour
         // behaviors to it as needed by your app. As an example, let's just make it
         // slowly rotate:
         // put the piano a little to the right so it isn't near the main character
-        result.Value.gameObject.transform.position = new Vector3(2, desiredInitialSize * 0.5f, 0);
+        float x = 2 + desiredInitialSize * numberOfAssetsLoaded % 4;
+        float y = desiredInitialSize * (0.5f + numberOfAssetsLoaded / 4);
+        result.Value.gameObject.transform.position = new Vector3(x, y, 0);
         result.Value.gameObject.AddComponent<Rotate>();
+        ++numberOfAssetsLoaded;
     }
 }

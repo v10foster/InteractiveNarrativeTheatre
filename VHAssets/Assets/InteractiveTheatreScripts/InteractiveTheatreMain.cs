@@ -897,7 +897,19 @@ public class InteractiveTheatreMain : VHMain
             var comp = GetComponent<LoadGooglePolyAsset>();
             if (comp)
             {
-                comp.LoadAsset(topNouns[1]);
+
+                /*
+                 list assets
+                 find best asset
+                 load best 
+                 position asset in empty space -- maybe in a block?
+                 
+                 */
+                for (int i = 0; i < 20 && i < topNouns.Count; ++i)
+                {
+                    comp.LoadAsset(topNouns[i], true);
+
+                }
             }
         }
 
