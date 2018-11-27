@@ -3858,6 +3858,7 @@ GameObject:
   - component: {fileID: 594113528}
   - component: {fileID: 594113531}
   - component: {fileID: 594113532}
+  - component: {fileID: 594113533}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -3887,7 +3888,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0.019607844}
+  m_BackGroundColor: {r: 0.11764707, g: 0.11764707, b: 0.16862746, a: 0.019607844}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -3912,7 +3913,7 @@ Camera:
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
-  m_AllowMSAA: 1
+  m_AllowMSAA: 0
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
@@ -3980,6 +3981,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PawnName: Camera
   m_PositionScale: 1
+--- !u!45 &594113533
+Skybox:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 594113525}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 2100000, guid: 12ae26ec723f2a04ea6a2afd760d94ee, type: 2}
 --- !u!114 &621203138 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 11400000, guid: 11f1f6c8c3d4f1e43831daee549da05f,
@@ -8519,6 +8528,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statusText: {fileID: 0}
+  desiredInitialSize: 1
+  lastRequestedAsset: 
+  findBestMatchRequested: 0
 --- !u!1 &2064294589
 GameObject:
   m_ObjectHideFlags: 0
