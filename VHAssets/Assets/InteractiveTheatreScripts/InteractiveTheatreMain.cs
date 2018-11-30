@@ -5,6 +5,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using System;
+//using FrameSchema;
 
 public class InteractiveTheatreMain : VHMain
 {
@@ -883,7 +884,8 @@ public class InteractiveTheatreMain : VHMain
         }
         if (GUILayout.Button("Load top 20 nouns", GUILayout.Height(m_debugMenuButtonH)))
         {
-            string nounsFilePath = "Assets\\InteractiveTheatreContent\\all_nouns_merged.txt";
+//            string nounsFilePath = "Assets\\InteractiveTheatreContent\\all_nouns_merged.txt";
+            string nounsFilePath = "Assets\\InteractiveTheatreContent\\all_nouns_only_props.txt";
 
             FileStream nounsFileStream = File.OpenRead(nounsFilePath);
             StreamReader sr = new StreamReader(nounsFileStream);
@@ -909,6 +911,42 @@ public class InteractiveTheatreMain : VHMain
                 {
                     comp.LoadAsset(topNouns[i], true);
 
+                }
+            }
+        }
+        if (GUILayout.Button("Play script", GUILayout.Height(m_debugMenuButtonH)))
+        {
+
+            string bradUtterance = "I am the knight.";
+
+            m_sbm.PythonCommand(string.Format(@"scene.command('set character {0} voicebackup remote {1}')", "Brad", "Microsoft|David|Desktop"));
+            m_sbm.SBPlayAudio("Brad", "speech_TTS", bradUtterance);
+            MobilePlayAudio("speech_TTS");
+            
+            string tigerUtterance = "I am the merchant.";
+            m_sbm.PythonCommand(string.Format(@"scene.command('set character {0} voicebackup remote {1}')", "Tiger", "Microsoft|Zira|Desktop"));
+            m_sbm.SBPlayAudio("Tiger", "speech_TTS", tigerUtterance);
+            MobilePlayAudio("speech_TTS");
+
+
+
+            //            string nounsFilePath = "Assets\\InteractiveTheatreContent\\all_nouns_merged.txt";
+            string nounsFilePath = "Assets\\InteractiveTheatreContent\\frame1.json";
+
+            FileStream nounsFileStream = File.OpenRead(nounsFilePath);
+
+            StreamReader sr = new StreamReader(nounsFileStream);
+            TheatreFrame myFrame = JsonUtility.FromJson<TheatreFrame>(sr.ReadToEnd());
+            if (myFrame != null)
+            {
+                var comp = GetComponent<LoadGooglePolyAsset>();
+                if (comp)
+                {
+                    foreach (var obj in myFrame.props_in_scene)
+                    {
+                        comp.LoadAsset(obj, true);
+
+                    }
                 }
             }
         }
